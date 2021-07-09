@@ -1,0 +1,108 @@
+Parameters:
+  KeyName:
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instance
+    Default: tpl_3_19_2020
+    Type: AWS::EC2::KeyPair::KeyName
+    ConstraintDescription: must be the name of an existing EC2 KeyPair.
+  InstanceType:
+    Description: WebServer EC2 instance type
+    Type: String
+    Default: t3a.micro
+    AllowedValues:
+      - t3a.micro
+    ConstraintDescription: must be a valid EC2 instance type.
+Mappings:
+  AWSInstanceType2Arch:
+    t3a.micro:
+      Arch: HVM64
+  AWSRegionArch2AMI:
+    ap-south-1:
+      HVM64: ami-0e306788ff2473ccb
+    us-east-1:
+      HVM64: ami-02354e95b39ca8dec
+    us-west-2:
+      HVM64: ami-01e24be29428c15b2
+    us-west-1:
+      HVM64: ami-0ec6517f6edbf8044
+    eu-west-1:
+      HVM64: ami-08935252a36e25f85
+    eu-west-2:
+      HVM64: ami-01419b804382064e4
+    eu-west-3:
+      HVM64: ami-0dd7e7ed60da8fb83
+    eu-central-1:
+      HVM64: ami-0cfbf4f6db41068ac
+    eu-north-1:
+      HVM64: ami-86fe70f8
+    ap-northeast-1:
+      HVM64: ami-00a5245b4816c38e6
+    ap-northeast-2:
+      HVM64: ami-00dc207f8ba6dc919
+    ap-northeast-3:
+      HVM64: ami-0b65f69a5c11f3522
+    ap-southeast-1:
+      HVM64: ami-05b3bcf7f311194b3
+    ap-southeast-2:
+      HVM64: ami-02fd0b06f06d93dfc
+    us-east-2:
+      HVM64: ami-0cd3dfa4e37921605
+    ca-central-1:
+      HVM64: ami-07423fb63ea0a0930
+    sa-east-1:
+      HVM64: ami-05145e0b28ad8e0b2
+    cn-north-1:
+      HVM64: ami-053617c9d818c1189
+    cn-northwest-1:
+      HVM64: ami-0f7937761741dc640
+Resources:
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: us-east-1f
+      InstanceType:
+        Ref: InstanceType
+      SecurityGroups:
+        - "admin-ssh-allow-list"
+        - "admin"
+        - "Admin-Server"
+      KeyName:
+        Ref: KeyName
+      UserData: IyEvYmluL3NoCgojIEFXUyBjbGkgdG9vbHMKeXVtIGluc3RhbGwgYXdzLWNsaSAteQoKIyBDcmVhdGUgbG9nIGRpcgpta2RpciAtcCAiL3Zhci9hcHAvbG9ncy9hcGlFcnJvciIKbWtkaXIgLXAgIi92YXIvYXBwL2xvZ3MvYXBpRXhjZXB0aW9uIgpta2RpciAtcCAiL3Zhci9hcHAvbG9ncy9hcGlUaW1lIgpta2RpciAtcCAiL3Zhci9hcHAvbG9ncy9yYXRlTGltaXRlZCIKY2htb2QgLVIgNzc3IC92YXIvYXBwL2xvZ3MKCiMgSW5zdGFsbCByZXF1aXJlZCB5dW0gcGFja2FnZXMKc3VkbyB5dW0gdXBkYXRlIC15CnN1ZG8geXVtIGluc3RhbGwgaHR0cGQgLXkKc3VkbyB5dW0gaW5zdGFsbCAteSBhbWF6b24tbGludXgtZXh0cmFzCnN1ZG8gYW1hem9uLWxpbnV4LWV4dHJhcyBlbmFibGUgcGhwNy4zCnN1ZG8geXVtIGluc3RhbGwgcGhwIC15CnN1ZG8geXVtIGluc3RhbGwgcGhwLXhtbCAteQoKIyBNeXNxbApzdWRvIHl1bSBpbnN0YWxsIG15c3FsIC15CgojIFJlZGlzCnN1ZG8geXVtIGluc3RhbGwgZ2NjIGdjYy1jKysgbWFrZSAteQp3Z2V0IGh0dHA6Ly9kb3dubG9hZC5yZWRpcy5pby9yZWRpcy1zdGFibGUudGFyLmd6CnRhciB4dnpmIHJlZGlzLXN0YWJsZS50YXIuZ3ogCmNkIHJlZGlzLXN0YWJsZSAmJiBtYWtlCnN1ZG8gY3Agc3JjL3JlZGlzLWNsaSAvdXNyL2Jpbi8gJiYgY2QgLwpzdWRvIHJtIC1yZiByZWRpcy1zdGFibGUqCgojIFBIUCByZXF1aXJlZCBtb2R1bGVzCnl1bSBpbnN0YWxsIHBocC1teXNxbGkgLXkKc3VkbyB5dW0gaW5zdGFsbCBwaHAtcGVjbC1yZWRpcyAteQojIEFXUyBjcmVkZW50aWFscyBzYXZlZCB0byBzZXJ2ZXIKbWtkaXIgfi8uYXdzCnByaW50ZiAiW2RlZmF1bHRdXG5hd3NfYWNjZXNzX2tleV9pZD1BS0lBNERPVlNWTlM1VEM3MzdPWlxuYXdzX3NlY3JldF9hY2Nlc3Nfa2V5PWpyU3NqaTRkRE04anVoeWFpSGdMcFoyc1htRHpocGVQWHVadHFaaFZcbiIgPj4gfi8uYXdzL2NyZWRlbnRpYWxzCnByaW50ZiAiW2RlZmF1bHRdXG5yZWdpb249dXMtZWFzdC0xXG5vdXRwdXQ9anNvblxuIiA+PiB+Ly5hd3MvY29uZmlnCiMgR0lUCnN1ZG8geXVtIGluc3RhbGwgZ2l0IC15CnN1ZG8gZ2l0IGNvbmZpZyDigJNnbG9iYWwgY29sb3Iuc3RhdHVzIGZhbHNlCnN1ZG8gZ2l0IGNvbmZpZyDigJNnbG9iYWwgY29sb3IuYnJhbmNoIGZhbHNlCnN1ZG8gZ2l0IGNvbmZpZyDigJNnbG9iYWwgY29sb3IuZGlmZiBmYWxzZQpzdWRvIGdpdCBjb25maWcg4oCTZ2xvYmFsIGNvbG9yLmludGVyYWN0aXZlIGZhbHNlCnN1ZG8gZ2l0IGNvbmZpZyDigJNnbG9iYWwgY29sb3Iuc3RhdHVzIGZhbHNlCiMgSW5zdGFsbCBub2RlSnMKY3VybCAtc0wgaHR0cHM6Ly9ycG0ubm9kZXNvdXJjZS5jb20vc2V0dXBfMTIueCB8IGJhc2ggLQp5dW0gaW5zdGFsbCBub2RlanMgLXkKIyBHaXRsYWIgcmVwb3MgdG8gY2xvbmUKZ2l0IGNsb25lIGh0dHBzOi8vdHBsLmdpdGxhYjpoYXVudGNvcGVhY3RpdmF0ZUBnaXRsYWIuY29tL3NoYXduY2hvbmcvdHBsX2FkbWluX25vZGVfc2VydmVyLmdpdCAvdHBsX2FkbWluX25vZGVfc2VydmVyCmdpdCBjbG9uZSBodHRwczovL3RwbC5naXRsYWI6aGF1bnRjb3BlYWN0aXZhdGVAZ2l0bGFiLmNvbS9zaGF3bmNob25nL3RwbF9hZG1pbl9zZXJ2ZXIuZ2l0IC92YXIvd3d3L2h0bWwvdHBsX2FkbWluX3NlcnZlcgpnaXQgY2xvbmUgaHR0cHM6Ly90cGwuZ2l0bGFiOmhhdW50Y29wZWFjdGl2YXRlQGdpdGxhYi5jb20vc2hhd25jaG9uZy90cGxfY29uZi5naXQgL3Zhci93d3cvaHRtbC90cGxfY29uZgpnaXQgY2xvbmUgaHR0cHM6Ly90cGwuZ2l0bGFiOmhhdW50Y29wZWFjdGl2YXRlQGdpdGxhYi5jb20vaGFyc2hpdDQvdG9wbGVhcm5yLmdpdCAvdmFyL3d3dy9odG1sL3RvcGxlYXJucgpnaXQgY2xvbmUgaHR0cHM6Ly90cGwuZ2l0bGFiOmhhdW50Y29wZWFjdGl2YXRlQGdpdGxhYi5jb20vc2hhd25jaG9uZy90cGxfZG9jdXdpa2kuZ2l0IC92YXIvd3d3L2h0bWwvd2lraQoKIyBBcGFjaGUgL2V0Yy9odHRwZC9jb25mL2h0dHBkLmNvbmYgZmlsZQpzZWQgLWkgJ3NARG9jdW1lbnRSb290IFwiL3Zhci93d3cvaHRtbFwiQERvY3VtZW50Um9vdCBcIi92YXIvd3d3L2h0bWwvdHBsX2FkbWluX3NlcnZlclwiQCcgL2V0Yy9odHRwZC9jb25mL2h0dHBkLmNvbmYKcHJpbnRmICJcbjxEaXJlY3RvcnkgXCIvdmFyL3d3dy9odG1sL3dpa2kvXCI+XG4gICBPcHRpb25zIEluZGV4ZXMgRm9sbG93U3ltTGlua3MgSW5jbHVkZXMgRXhlY0NHSVxuICAgQWxsb3dPdmVycmlkZSBBbGxcbiAgIFJlcXVpcmUgYWxsIGdyYW50ZWRcbjwvRGlyZWN0b3J5PlxuIiA+PiAvZXRjL2h0dHBkL2NvbmYvaHR0cGQuY29uZgpwcmludGYgIlxuPERpcmVjdG9yeSBcIi92YXIvd3d3L2h0bWwvdHBsX2NvbmYvXCI+XG4gICBPcHRpb25zIEluZGV4ZXMgRm9sbG93U3ltTGlua3MgSW5jbHVkZXMgRXhlY0NHSVxuICAgQWxsb3dPdmVycmlkZSBBbGxcbiAgIFJlcXVpcmUgYWxsIGdyYW50ZWRcbjwvRGlyZWN0b3J5PlxuIiA+Pi9ldGMvaHR0cGQvY29uZi9odHRwZC5jb25mCnByaW50ZiAiXG48SWZNb2R1bGUgYWxpYXNfbW9kdWxlPlxuICAgQWxpYXMgL3dpa2kgXCIvdmFyL3d3dy9odG1sL3dpa2kvZG9rdXdpa2kvXCJcbjwvSWZNb2R1bGU+XG4iID4+IC9ldGMvaHR0cGQvY29uZi9odHRwZC5jb25mCgojIENob3duIHdpa2kgZGlyZWN0b3J5IHRvIGFwYWNoZSBzbyB3aWtpIGNhbiBiZSBwdXNoZWQKY2hvd24gLVIgYXBhY2hlOmFwYWNoZSAvdmFyL3d3dy9odG1sL3dpa2kvCmNob3duIC1SIGFwYWNoZTphcGFjaGUgL3Zhci93d3cvaHRtbC93aWtpLy5naXQKCiMgQ29uZmlndXJlIGFuZCBydW4gYWRtaW4gbm9kZSBzZXJ2ZXIKY2QgL3RwbF9hZG1pbl9ub2RlX3NlcnZlcgpucG0gaW5pdCAteQpucG0gaW5zdGFsbCBleHByZXNzIC0tc2F2ZQpucG0gaW5zdGFsbCByZWRpcwpucG0gaW5zdGFsbCBwaGluCm5vZGUgQWRtaW5Ob2RlU2VydmVyLmpzCgojIEdldCBTZWNyZXQga2V5IGludG8gdHBsIGZpbGUKbWtkaXIgL3Vzci9zaGFyZS9odHRwZC8uc3NoCnN1ZG8gY2hvd24gLVIgZWMyLXVzZXIgL3Vzci9zaGFyZS9odHRwZC8uc3NoCgojIFJlc3RhcnQgYXBhY2hlIHNlcnZlcgpzZXJ2aWNlIGh0dHBkIHJlc3RhcnQ=
+      ImageId:
+        Fn::FindInMap:
+          - AWSRegionArch2AMI
+          - Ref: AWS::Region
+          - Fn::FindInMap:
+              - AWSInstanceType2Arch
+              - Ref: InstanceType
+              - Arch
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeType: gp2
+            VolumeSize: "8"
+            DeleteOnTermination: "false"
+            Encrypted: "false"
+Outputs:
+  InstanceId:
+    Description: InstanceId of the newly created EC2 instance
+    Value:
+      Ref: EC2Instance
+  AZ:
+    Description: Availability Zone of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+        - EC2Instance
+        - AvailabilityZone
+  PublicDNS:
+    Description: Public DNSName of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+        - EC2Instance
+        - PublicDnsName
+  PublicIP:
+    Description: Public IP address of the newly created EC2 instance
+    Value:
+      Fn::GetAtt:
+        - EC2Instance
+        - PublicIp

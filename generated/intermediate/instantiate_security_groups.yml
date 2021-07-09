@@ -1,0 +1,62 @@
+Parameters:
+  VpcId:
+    Description: VPC ID
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-4e376634
+
+Resources:
+  EC2SG2I1U:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: SSH allow List
+      GroupName: admin-servers
+      VpcId:
+        Ref: VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: "Name"
+          Value: "admin"
+  EC2SG2I2U:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: karan server security group
+      VpcId:
+        Ref: VpcId
+      GroupName: karan-servers
+      Tags:
+        - Key: "Name"
+          Value: "karan"
+  EC2SG2I3U:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Log server security group
+      VpcId:
+        Ref: VpcId
+      GroupName: log-servers
+      Tags:
+        - Key: "Name"
+          Value: "log"
+  EC2SG2I4U:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Utility server security group
+      VpcId:
+        Ref: VpcId
+      GroupName: utility-servers
+      Tags:
+        - Key: "Name"
+          Value: "utility"
+  EC2SG2I5U:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: Auto-scaling server security group
+      VpcId:
+        Ref: VpcId
+      GroupName: karan-auto-scaling-group
+      Tags:
+        - Key: "Name"
+          Value: "karan-auto-scaling-group"

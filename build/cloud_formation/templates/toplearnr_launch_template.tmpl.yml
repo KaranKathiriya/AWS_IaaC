@@ -1,0 +1,12 @@
+Resources:
+  EC2LT38HOW:
+    Type: "AWS::EC2::LaunchTemplate"
+    Properties:
+      LaunchTemplateData:
+        InstanceType: t2.micro
+        KeyName: {KEY_PAIR_NAME}
+        ImageId: ami-02354e95b39ca8dec
+        SecurityGroupIds:
+          - "sg-0a2ec66b3eaf88218"
+        UserData: {USERDATA}
+      LaunchTemplateName: {TEMPLATE_NAME}

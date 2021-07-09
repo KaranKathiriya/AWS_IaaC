@@ -1,0 +1,124 @@
+########################################################################################
+# This config file is parsed using libconfig , and its grammar is described in:
+# http://www.hyperrealm.com/libconfig/libconfig_manual.html#Configuration-File-Grammar
+# Grammar is also copied at the end of this file
+########################################################################################
+
+########################################################################################
+# IMPORTANT INFORMATION REGARDING THIS CONFIGURATION FILE:
+########################################################################################
+# On startup, ProxySQL reads its config file (if present) to determine its datadir.
+# What happens next depends on if the database file (disk) is present in the defined
+# datadir (i.e. "/var/lib/proxysql/proxysql.db").
+#
+# If the database file is found, ProxySQL initializes its in-memory configuration from
+# the persisted on-disk database. So, disk configuration gets loaded into memory and
+# then propagated towards the runtime configuration.
+#
+# If the database file is not found and a config file exists, the config file is parsed
+# and its content is loaded into the in-memory database, to then be both saved on-disk
+# database and loaded at runtime.
+#
+# IMPORTANT: If a database file is found, the config file is NOT parsed. In this case
+#            ProxySQL initializes its in-memory configuration from the persisted on-disk
+#            database ONLY. In other words, the configuration found in the proxysql.cnf
+#            file is only used to initial the on-disk database read on the first startup.
+#
+# In order to FORCE a re-initialise of the on-disk database from the configuration file
+# the ProxySQL service should be started with "service proxysql initial".
+#
+########################################################################################
+# Exporting configuration into file
+###################################
+# When the ProxySQL server is configured using the above statements it might be necessary to copy runtime configuration to another ProxySQL server. In other cases it might be convenient to back up configuration into the file. The following commands are available for these cases:
+# proxymysql> SELECT CONFIG INTO OUTFILE /tmp/f1
+# This command saves ProxySQL runtime settings into the specified file in the same format as the /etc/proxysql.cnf file. The command allows to store current runtime configuration and reuse it later. This command has the alias SAVE CONFIG TO FILE /tmp/f2.
+# proxymysql> SELECT CONFIG FILE
+# This command exports ProxySQL runtime settings in the format of the resultset. The resultset has one row with one column which contains configuration in the format of the /etc/proxysql.cnf file. Usage example:
+# $ mysql -padmin -uadmin -h127.0.0.1 -P6032 -e 'select config file'
+########################################################################################
+datadir="/var/lib/proxysql"
+errorlog="/var/app/logs/proxysql.log"
+
+admin_variables =
+{
+	admin_credentials="admin:admin"
+}
+
+mysql_variables =
+{
+	monitor_connect_interval="2000"
+	monitor_password="monitor"
+	monitor_ping_interval="2000"
+	monitor_read_only_interval="2000"
+	monitor_username="monitor"
+}
+mysql_users:
+(
+	{
+		username="{SQL_USER}"
+		password="{SQL_PASS}"
+		active=1
+		use_ssl=0
+		default_hostgroup=1
+		schema_locked=0
+		transaction_persistent=1
+		fast_forward=0
+		backend=1
+		frontend=1
+		max_connections=10000
+	}
+)
+mysql_query_rules:
+(
+
+)
+mysql_servers:
+(
+	{
+		hostgroup_id=1
+		hostname="{SQL_HOST}"
+		port=3306
+		gtid_port=0
+		status="ONLINE"
+		weight=1
+		compression=0
+		max_connections=1000
+		max_replication_lag=0
+		use_ssl=0
+		max_latency_ms=0
+	}
+)
+mysql_replication_hostgroups:
+(
+	{
+		writer_hostgroup=1
+		reader_hostgroup=2
+		check_type="read_only"
+		comment="cluster1"
+	}
+)
+mysql_group_replication_hostgroups:
+(
+
+)
+mysql_galera_hostgroups:
+(
+
+)
+mysql_aws_aurora_hostgroups:
+(
+
+)
+scheduler:
+(
+
+)
+restapi:
+(
+
+)
+proxysql_servers:
+(
+
+)
